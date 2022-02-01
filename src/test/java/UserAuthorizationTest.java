@@ -10,16 +10,16 @@ public class UserAuthorizationTest {
     private UserData userData;
 
     @Before
-    public void SetUp(){
+    public void SetUp() {
         user = User.getRandom();
         userClient = new UserClient();
     }
 
     @Test
     @DisplayName("Авторизация существующего пользователя")
-    public void authorizationRegisteredUser(){
+    public void authorizationRegisteredUser() {
         userClient.create(user);
-        userClient.Authorization(userData.from(user))
+        userClient.Authorization(UserData.from(user))
                 .then().assertThat()
                 .body("success", equalTo(true))
                 .and()
@@ -28,8 +28,8 @@ public class UserAuthorizationTest {
 
     @Test
     @DisplayName("логин с неверным логином и паролем")
-    public void authorizationWithIncorrectLoginPassword(){
-        userClient.userAuthorizationWithIncorrectEmailPassword(userData.from(user))
+    public void authorizationWithIncorrectLoginPassword() {
+        userClient.userAuthorizationWithIncorrectEmailPassword(UserData.from(user))
                 .then().assertThat()
                 .body("message", equalTo("email or password are incorrect"))
                 .and().

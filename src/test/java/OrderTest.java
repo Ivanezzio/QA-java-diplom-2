@@ -1,5 +1,4 @@
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,9 +23,9 @@ public class OrderTest {
 
     @Test
     @DisplayName("Авторизация пользователя и создание заказа с ингредиентами")
-    public void createOrderAuthorizedUserTest(){
+    public void createOrderAuthorizedUserTest() {
         userClient.create(user);
-        String accessToken= userClient.getUserAccessToken(userData.from(user));
+        String accessToken = userClient.getUserAccessToken(UserData.from(user));
         String ingredient = ingredientClient.getIngredients(1);
         orderClient.newOrderWithAuthorization(ingredient, accessToken)
                 .then().assertThat()
@@ -37,7 +36,7 @@ public class OrderTest {
 
     @Test
     @DisplayName("Создание заказа с игредиентами без авторизации пользователя")
-    public void createOrderWithIngredientAndWithoutAuthorizationTest (){
+    public void createOrderWithIngredientAndWithoutAuthorizationTest() {
         String ingredientId = ingredientClient.getIngredients(1);
         orderClient.newOrderWithoutAuthorization(ingredientId)
                 .then().assertThat()
@@ -49,9 +48,9 @@ public class OrderTest {
 
     @Test
     @DisplayName("Создание заказа без игредиентов с авторизацией пользователя")
-    public void createOrderWithoutIngredientAndWithAuthorizationTest () {
+    public void createOrderWithoutIngredientAndWithAuthorizationTest() {
         userClient.create(user);
-        String accessToken= userClient.getUserAccessToken(userData.from(user));
+        String accessToken = userClient.getUserAccessToken(UserData.from(user));
         orderClient.newOrderWithoutIngredients(accessToken)
                 .then().assertThat()
                 .body("message", equalTo("Ingredient ids must be provided"))
@@ -61,9 +60,9 @@ public class OrderTest {
 
     @Test
     @DisplayName("Создание заказа с авторизацией пользователя и с неверным хешем")
-    public void createOrderWithWrongIngredientAndWithAuthorizationTest () {
+    public void createOrderWithWrongIngredientAndWithAuthorizationTest() {
         userClient.create(user);
-        String accessToken= userClient.getUserAccessToken(userData.from(user));
+        String accessToken = userClient.getUserAccessToken(UserData.from(user));
         String ingredientId = "incorrectId";
         orderClient.newOrderWithAuthorization(ingredientId, accessToken)
                 .then().assertThat()
@@ -73,9 +72,9 @@ public class OrderTest {
 
     @Test
     @DisplayName("Получение заказов авторизованного пользователя")
-    public void getOrderAfterAuthorizationTest () {
+    public void getOrderAfterAuthorizationTest() {
         userClient.create(user);
-        String accessToken= userClient.getUserAccessToken(userData.from(user));
+        String accessToken = userClient.getUserAccessToken(UserData.from(user));
         String ingredient = ingredientClient.getIngredients(1);
         orderClient.newOrderWithAuthorization(ingredient, accessToken);
         orderClient.getOrdersList(accessToken)
@@ -91,7 +90,7 @@ public class OrderTest {
 
     @Test
     @DisplayName("Попытка получения заказов неавторизованного пользователя")
-    public void getOrderWithoutAuthorizationTest () {
+    public void getOrderWithoutAuthorizationTest() {
         orderClient.getOrdersListWithoutUserAuthorization()
                 .then().assertThat()
                 .body("message", equalTo("You should be authorised"))

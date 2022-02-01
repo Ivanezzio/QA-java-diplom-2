@@ -11,18 +11,18 @@ public class EditUserDataTest {
 
 
     @Before
-    public void SetUp(){
+    public void SetUp() {
         user = User.getRandom();
         userClient = new UserClient();
     }
 
     @Test
     @DisplayName("Изменения регистрационных данных с авторизацией")
-    public void editUserDataWithAuthorizationTest(){
-        String accessToken= userClient.registrationAndGetAccessToken(user);
-        userClient.Authorization(userData.from(user));
-        User newUser = user.getRandom();
-        userClient.editUserData(newUser,accessToken)
+    public void editUserDataWithAuthorizationTest() {
+        String accessToken = userClient.registrationAndGetAccessToken(user);
+        userClient.Authorization(UserData.from(user));
+        User newUser = User.getRandom();
+        userClient.editUserData(newUser, accessToken)
                 .then().assertThat()
                 .body("success", equalTo(true))
                 .and()
@@ -32,16 +32,16 @@ public class EditUserDataTest {
 
     @Test
     @DisplayName("Изменения регистрационных данных без авторизации")
-    public void editUserDataWithoutAuthorizationTest(){
+    public void editUserDataWithoutAuthorizationTest() {
         userClient.create(user);
         User newUser = User.getRandom();
-        userClient.editUserDataWithoutLogin(userData.from(newUser))
+        userClient.editUserDataWithoutLogin(UserData.from(newUser))
                 .then().assertThat()
                 .body("message", equalTo("You should be authorised"))
                 .and()
                 .body("success", equalTo(false))
                 .and()
                 .statusCode(401);
-}
+    }
 }
 

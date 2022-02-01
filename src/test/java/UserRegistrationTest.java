@@ -9,19 +9,19 @@ public class UserRegistrationTest {
     private UserClient userClient;
 
     @Before
-    public void SetUp(){
+    public void SetUp() {
         user = User.getRandom();
         userClient = new UserClient();
     }
 
     @Test
     @DisplayName("Регистрация нового пользователя")
-    public void newUserRegistrationTest (){
+    public void newUserRegistrationTest() {
         userClient.create(user)
                 .then().assertThat()
                 .body("success", equalTo(true))
                 .and()
-                .statusCode(200);;
+                .statusCode(200);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class UserRegistrationTest {
 
     @Test
     @DisplayName("Создание пользователя без указания почты")
-    public void newUserWithoutEmailTest(){
+    public void newUserWithoutEmailTest() {
         userClient.createWithOutEmail(user)
                 .then().assertThat()
                 .body("message", equalTo("Email, password and name are required fields"))
@@ -51,7 +51,7 @@ public class UserRegistrationTest {
 
     @Test
     @DisplayName("Создание пользователя без указания пароля")
-    public void newUserWithoutPasswordTest(){
+    public void newUserWithoutPasswordTest() {
         userClient.createWithOutPassword(user)
                 .then().assertThat()
                 .body("message", equalTo("Email, password and name are required fields"))
@@ -63,7 +63,7 @@ public class UserRegistrationTest {
 
     @Test
     @DisplayName("Создание пользователя без указания имени")
-    public void newUserWithoutNameTest(){
+    public void newUserWithoutNameTest() {
         userClient.createWithOutName(user)
                 .then().assertThat()
                 .body("message", equalTo("Email, password and name are required fields"))
